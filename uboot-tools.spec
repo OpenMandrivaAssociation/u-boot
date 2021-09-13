@@ -1,9 +1,9 @@
-%define _disable_lto 1
+#define _disable_lto 1
 %undefine candidate
 
 Name:		uboot-tools
 Version:	2021.07
-Release:	%{?candidate:0.%{candidate}.}2
+Release:	%{?candidate:0.%{candidate}.}3
 Summary:	U-Boot utilities
 License:	GPLv2+ BSD LGPL-2.1+ LGPL-2.0+
 URL:		http://www.denx.de/wiki/U-Boot
@@ -16,6 +16,9 @@ Source4:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/aarch64-chr
 
 # (tpg) add more paths to check for dtb files
 Patch1:		u-boot-2021.04-rc4-add-more-directories-to-efi_dtb_prefixes.patch
+
+# Make it compile
+Patch2:		u-boot-2021.07-compile.patch
 
 # RPi - uses RPI firmware device tree for HAT support
 Patch3:		https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/rpi-Enable-using-the-DT-provided-by-the-Raspberry-Pi.patch
