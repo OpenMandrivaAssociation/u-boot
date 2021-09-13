@@ -1,3 +1,4 @@
+%define _disable_lto 1
 %undefine candidate
 
 Name:		uboot-tools
