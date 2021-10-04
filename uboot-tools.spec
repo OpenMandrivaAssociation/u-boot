@@ -2,13 +2,13 @@
 %undefine candidate
 
 Name:		uboot-tools
-Version:	2021.07
-Release:	%{?candidate:0.%{candidate}.}3
+Version:	2021.10
+Release:	%{?candidate:0.%{candidate}.}1
 Summary:	U-Boot utilities
 License:	GPLv2+ BSD LGPL-2.1+ LGPL-2.0+
 URL:		http://www.denx.de/wiki/U-Boot
 
-Source0:	ftp://ftp.denx.de/pub/u-boot/u-boot-%{version}%{?candidate:-%{candidate}}.tar.bz2
+Source0:	https://ftp.denx.de/pub/u-boot/u-boot-%{version}%{?candidate:-%{candidate}}.tar.bz2
 Source1:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/arm-boards
 Source2:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/arm-chromebooks
 Source3:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/aarch64-boards
@@ -16,9 +16,6 @@ Source4:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/aarch64-chr
 
 # (tpg) add more paths to check for dtb files
 Patch1:		u-boot-2021.04-rc4-add-more-directories-to-efi_dtb_prefixes.patch
-
-# Make it compile
-Patch2:		u-boot-2021.07-compile.patch
 
 # RPi - uses RPI firmware device tree for HAT support
 Patch3:		https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/rpi-Enable-using-the-DT-provided-by-the-Raspberry-Pi.patch
@@ -38,7 +35,6 @@ Patch100:	u-boot-2021.04-rc3-fix-booting-on-rk3399.patch
 Patch101:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip/zzz-usb-otg-fix.patch
 Patch103:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64-edge/add-u-boot-delay-rockpro64.patch
 Patch104:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64-edge/add-u-boot-setexpr-rockpro64.patch
-Patch105:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64-mainline/general-prioritize-sd.patch
 Patch106:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64-mainline/rk3399-enable-stable-mac.patch
 
 BuildRequires:	bc
@@ -97,8 +93,9 @@ cp %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} .
 %build
 mkdir builds
 
-%make_build HOSTCC="%{__cc} %{optflags}" CROSS_COMPILE="" tools-only_defconfig O=builds/
-%make_build HOSTCC="%{__cc} %{optflags}" CROSS_COMPILE="" tools-all O=builds/
+# u-boot makes assumptions about section naming etc. that are specific to ld.bfd
+%make_build HOSTCC="%{__cc} %{optflags}" CROSS_COMPILE="" LDFLAGS="-fuse-ld=bfd" KBUILD_LDFLAGS="-fuse-ld=bfd" HOSTLDFLAGS="-fuse-ld=bfd" tools-only_defconfig O=builds/
+%make_build HOSTCC="%{__cc} %{optflags}" CROSS_COMPILE="" LDFLAGS="-fuse-ld=bfd" KBUILD_LDFLAGS="-fuse-ld=bfd" HOSTLDFLAGS="-fuse-ld=bfd" tools-all O=builds/
 
 %ifarch aarch64 %{arm}
 for board in $(cat %{_arch}-boards)
