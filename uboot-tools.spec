@@ -1,4 +1,6 @@
-#define _disable_lto 1
+# (tpg) 2021-11-04 firmware does not support LTO
+%define _disable_lto 1
+
 %undefine candidate
 
 Name:		uboot-tools
@@ -19,6 +21,8 @@ Patch1:		u-boot-2021.04-rc4-add-more-directories-to-efi_dtb_prefixes.patch
 
 # RPi - uses RPI firmware device tree for HAT support
 Patch3:		https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/rpi-Enable-using-the-DT-provided-by-the-Raspberry-Pi.patch
+Patch4:		https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/rpi-fallback-to-max-clock-for-mmc.patch
+Patch5:		https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/rpi-bcm2835_sdhost-firmware-managed-clock.patch
 
 # Board fixes and enablement
 # AllWinner improvements
@@ -27,7 +31,10 @@ Patch10:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/AllWinner-P
 Patch11:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/0001-Fix-BeagleAI-detection.patch
 # Rockchips improvements
 Patch12:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/phy-rockchip-inno-usb2-fix-hang-when-multiple-controllers-exit.patch
-Patch13:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/rockchip-fix-mmc-numbering.patch
+Patch13:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/0001-Revert-spi-spi-uclass-Add-support-to-manually-reloca.patch
+Patch14:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/0001-enable-hs400-and-sdma-support.patch
+Patch15:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/0001-Revert-mmc-rockchip_sdhci-Add-support-for-RK3568.patch
+Patch16:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/0002-Revert-mmc-rockchip_sdhci-add-phy-and-clock-config-f.patch
 
 # Misc patches
 # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=973323
@@ -58,7 +65,7 @@ BuildRequires:	arm-trusted-firmware-armv8
 Requires:	dtc
 %ifarch %{armx}
 Obsoletes:	uboot-images-elf < 2019.07
-Provides:	uboot-images-elf < 2019.07
+Provides:	uboot-images-elf = 2019.07
 %endif
 
 %description
@@ -118,7 +125,7 @@ do
     echo "Board: $board using rk3328"
     cp /usr/share/arm-trusted-firmware/rk3328/* builds/$(echo $board)/
   fi
-  rk3399=(evb-rk3399 ficus-rk3399 firefly-rk3399 khadas-edge-captain-rk3399 khadas-edge-rk3399 khadas-edge-v-rk3399 nanopc-t4-rk3399 nanopi-m4-2gb-rk3399 nanopi-m4-rk3399 nanopi-neo4-rk3399 orangepi-rk3399 pinebook-pro-rk3399 puma-rk3399 rock960-rk3399 rock-pi-4c-rk3399 rock-pi-4-rk3399 rock-pi-n10-rk3399pro rockpro64-rk3399 roc-pc-mezzanine-rk3399 roc-pc-rk3399)
+  rk3399=(evb-rk3399 ficus-rk3399 firefly-rk3399 khadas-edge-captain-rk3399 khadas-edge-rk3399 khadas-edge-v-rk3399 leez-rk3399 nanopc-t4-rk3399 nanopi-m4-2gb-rk3399 nanopi-m4b-rk3399 nanopi-m4-rk3399 nanopi-neo4-rk3399 nanopi-r4s-rk3399 orangepi-rk3399 pinebook-pro-rk3399 puma-rk3399 rock960-rk3399 rock-pi-4c-rk3399 rock-pi-4-rk3399 rock-pi-n10-rk3399pro rockpro64-rk3399 roc-pc-mezzanine-rk3399 roc-pc-rk3399)
   if [[ " ${rk3399[*]} " == *" $board "* ]]; then
     echo "Board: $board using rk3399"
     cp /usr/share/arm-trusted-firmware/rk3399/* builds/$(echo $board)/
@@ -132,7 +139,7 @@ do
   sed -i -e 's/.*CONFIG_GZIP.*$/CONFIG_GZIP=y/g' builds/$(echo $board)/.config
   sed -i -e 's/.*CONFIG_CMD_UNZIP.*$/CONFIG_CMD_UNZIP=y/g' builds/$(echo $board)/.config
 
-  %make_build HOSTCC="%{__cc} %{optflags}" CROSS_COMPILE="" V=1 O=builds/$(echo $board)/
+  %make_build HOSTCC="%{__cc} %{optflags}" CROSS_COMPILE="" LDFLAGS="-fuse-ld=bfd" KBUILD_LDFLAGS="-fuse-ld=bfd" HOSTLDFLAGS="-fuse-ld=bfd" V=1 O=builds/$(echo $board)/
 done
 
   # build spi images for rockchip boards with SPI flash
@@ -142,7 +149,7 @@ done
     builds/$(echo $board)/tools/mkimage -n rk3399 -T rkspi -d builds/$(echo $board)/tpl/u-boot-tpl.bin:builds/$(echo $board)/spl/u-boot-spl.bin builds/$(echo $board)/idbloader.spi
   fi
   # build spi, and uart images for mvebu boards
-  mvebu=(clearfog helios4 turris_omnia)
+#  mvebu=(clearfog helios4 turris_omnia)
   if [[ "  ${mvebu[*]} " == *" $board "* ]]; then
     for target in spi uart
     do
@@ -150,7 +157,7 @@ done
       sed -i -e '/CONFIG_MVEBU_SPL_BOOT_DEVICE_/d' configs/$(echo $board)_defconfig
       echo CONFIG_MVEBU_SPL_BOOT_DEVICE_${target^^}=y >> configs/$(echo $board)_defconfig
       make $(echo $board)_defconfig O=builds/$(echo $board-$target)/
-      %make_build HOSTCC="%{__cc} $RPM_OPT_FLAGS" CROSS_COMPILE="" O=builds/$(echo $board-$target)/
+      %make_build HOSTCC="%{__cc} %{optflags}" CROSS_COMPILE="" LDFLAGS="-fuse-ld=bfd" KBUILD_LDFLAGS="-fuse-ld=bfd" HOSTLDFLAGS="-fuse-ld=bfd" O=builds/$(echo $board-$target)/
     done
   fi
 %endif
