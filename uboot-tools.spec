@@ -5,7 +5,7 @@
 
 Name:		uboot-tools
 Version:	2021.10
-Release:	%{?candidate:0.%{candidate}.}1
+Release:	%{?candidate:0.%{candidate}.}2
 Summary:	U-Boot utilities
 License:	GPLv2+ BSD LGPL-2.1+ LGPL-2.0+
 URL:		http://www.denx.de/wiki/U-Boot
@@ -42,7 +42,8 @@ Patch100:	u-boot-2021.04-rc3-fix-booting-on-rk3399.patch
 Patch101:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip/zzz-usb-otg-fix.patch
 Patch103:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64-edge/add-u-boot-delay-rockpro64.patch
 Patch104:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64-edge/add-u-boot-setexpr-rockpro64.patch
-Patch106:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64-mainline/rk3399-enable-stable-mac.patch
+Patch106:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-enable-stable-mac.patch
+Patch107:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-disable-hdmi.patch
 
 BuildRequires:	bc
 BuildRequires:	dtc
@@ -55,13 +56,9 @@ BuildRequires:	bison
 BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(sdl2)
 BuildRequires:	swig
-%ifarch %{armx}
-BuildRequires:	vboot-utils
-%endif
 %ifarch aarch64
 BuildRequires:	arm-trusted-firmware-armv8
 %endif
-
 Requires:	dtc
 %ifarch %{armx}
 Obsoletes:	uboot-images-elf < 2019.07
