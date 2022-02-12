@@ -4,7 +4,7 @@
 %undefine candidate
 
 Name:		uboot-tools
-Version:	2021.10
+Version:	2022.01
 Release:	%{?candidate:0.%{candidate}.}3
 Summary:	U-Boot utilities
 License:	GPLv2+ BSD LGPL-2.1+ LGPL-2.0+
@@ -17,32 +17,25 @@ Source3:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/aarch64-boa
 Source4:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/aarch64-chromebooks
 
 # (tpg) add more paths to check for dtb files
-Patch1:		u-boot-2021.04-rc4-add-more-directories-to-efi_dtb_prefixes.patch
+Patch1:		https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/u-boot-2021.04-rc4-add-more-directories-to-efi_dtb_prefixes.patch
 
+# Board fixes and enablement
+Patch2:		https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/v2-console-usb-kbd-Limit-poll-frequency-to-improve-performance.patch
 # RPi - uses RPI firmware device tree for HAT support
 Patch3:		https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/rpi-Enable-using-the-DT-provided-by-the-Raspberry-Pi.patch
 Patch4:		https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/rpi-fallback-to-max-clock-for-mmc.patch
 Patch5:		https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/rpi-bcm2835_sdhost-firmware-managed-clock.patch
 
-# Board fixes and enablement
-# AllWinner improvements
-Patch10:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/AllWinner-PineTab.patch
 # TI fixes
 Patch11:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/0001-Fix-BeagleAI-detection.patch
 # Rockchips improvements
-Patch12:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/phy-rockchip-inno-usb2-fix-hang-when-multiple-controllers-exit.patch
-Patch13:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/0001-Revert-spi-spi-uclass-Add-support-to-manually-reloca.patch
-Patch14:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/0001-enable-hs400-and-sdma-support.patch
-Patch15:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/0001-Revert-mmc-rockchip_sdhci-Add-support-for-RK3568.patch
-Patch16:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/0002-Revert-mmc-rockchip_sdhci-add-phy-and-clock-config-f.patch
+Patch12:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/v3-phy-Track-power-on-and-init-counts-in-uclass.patch
+Patch13:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/dts-rockchip-rk3399-enable-emmc-phy-for-spl.patch
+Patch14:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/0001-Revert-spi-spi-uclass-Add-support-to-manually-reloca.patch
 
 # Misc patches
 # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=973323
-Patch100:	u-boot-2021.04-rc3-fix-booting-on-rk3399.patch
 Patch101:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip/zzz-usb-otg-fix.patch
-Patch103:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64-edge/add-u-boot-delay-rockpro64.patch
-Patch104:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64-edge/add-u-boot-setexpr-rockpro64.patch
-Patch106:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-enable-stable-mac.patch
 Patch107:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-disable-hdmi.patch
 
 BuildRequires:	bc
@@ -237,7 +230,6 @@ cp -p board/solidrun/clearfog/README builds/docs/README.clearfog
 cp -p board/solidrun/mx6cuboxi/README builds/docs/README.mx6cuboxi
 cp -p board/sunxi/README.sunxi64 builds/docs/README.sunxi64
 cp -p board/sunxi/README.nand builds/docs/README.sunxi-nand
-cp -p board/ti/am335x/README builds/docs/README.am335x
 cp -p board/ti/omap5_uevm/README builds/docs/README.omap5_uevm
 cp -p board/udoo/README builds/docs/README.udoo
 cp -p board/wandboard/README builds/docs/README.wandboard
@@ -245,12 +237,12 @@ cp -p board/warp/README builds/docs/README.warp
 cp -p board/warp7/README builds/docs/README.warp7
 
 %files
-%doc README doc/README.kwbimage doc/README.distro doc/README.gpt
+%doc README doc/README.kwbimage doc/develop/distro.rst doc/README.gpt
 %doc doc/README.odroid doc/README.rockchip doc/develop/uefi doc/uImage.FIT doc/arch/arm64.rst
 %doc doc/chromium builds/docs/*
-%doc doc/board/amlogic/ doc/board/rockchip/
+%doc doc/board/amlogic/ doc/board/rockchip/ doc/board/ti/am335x_evm.rst
 %{_bindir}/*
-%{_mandir}/man1/mkimage.1*
+%doc %{_mandir}/man1/mkimage.1*
 %dir %{_datadir}/uboot/
 
 %ifarch aarch64
