@@ -4,7 +4,7 @@
 %undefine candidate
 
 Name:		uboot-tools
-Version:	2022.01
+Version:	2022.04
 Release:	%{?candidate:0.%{candidate}.}3
 Summary:	U-Boot utilities
 License:	GPLv2+ BSD LGPL-2.1+ LGPL-2.0+
@@ -20,7 +20,6 @@ Source4:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/aarch64-chr
 Patch1:		https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/u-boot-2021.04-rc4-add-more-directories-to-efi_dtb_prefixes.patch
 
 # Board fixes and enablement
-Patch2:		https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/v2-console-usb-kbd-Limit-poll-frequency-to-improve-performance.patch
 # RPi - uses RPI firmware device tree for HAT support
 Patch3:		https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/rpi-Enable-using-the-DT-provided-by-the-Raspberry-Pi.patch
 Patch4:		https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/rpi-fallback-to-max-clock-for-mmc.patch
@@ -29,8 +28,6 @@ Patch5:		https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/rpi-bcm2835
 # TI fixes
 Patch11:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/0001-Fix-BeagleAI-detection.patch
 # Rockchips improvements
-Patch12:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/v3-phy-Track-power-on-and-init-counts-in-uclass.patch
-Patch13:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/dts-rockchip-rk3399-enable-emmc-phy-for-spl.patch
 Patch14:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/0001-Revert-spi-spi-uclass-Add-support-to-manually-reloca.patch
 
 # Misc patches
@@ -48,6 +45,9 @@ BuildRequires:	flex
 BuildRequires:	bison
 BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(sdl2)
+BuildRequires:	pkgconfig(uuid)
+BuildRequires:	pkgconfig(gnutls)
+BuildRequires:	pkgconfig(ncursesw)
 BuildRequires:	swig
 %ifarch aarch64
 BuildRequires:	arm-trusted-firmware-armv8
