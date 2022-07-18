@@ -4,8 +4,8 @@
 %undefine candidate
 
 Name:		uboot-tools
-Version:	2022.04
-Release:	%{?candidate:0.%{candidate}.}4
+Version:	2022.07
+Release:	%{?candidate:0.%{candidate}.}1
 Summary:	U-Boot utilities
 License:	GPLv2+ BSD LGPL-2.1+ LGPL-2.0+
 URL:		http://www.denx.de/wiki/U-Boot
@@ -23,8 +23,6 @@ Patch5:		https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/rpi-bcm2835
 
 # TI fixes
 Patch11:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/0001-Fix-BeagleAI-detection.patch
-# Rockchips improvements
-Patch14:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/0001-Revert-spi-spi-uclass-Add-support-to-manually-reloca.patch
 
 # Misc patches
 # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=973323
