@@ -1,10 +1,7 @@
-# (tpg) 2021-11-04 firmware does not support LTO
-%define _disable_lto 1
-
 %undefine candidate
 
 Name:		uboot-tools
-Version:	2022.07
+Version:	2022.10
 Release:	%{?candidate:0.%{candidate}.}1
 Summary:	U-Boot utilities
 License:	GPLv2+ BSD LGPL-2.1+ LGPL-2.0+
@@ -14,15 +11,18 @@ Source1:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/aarch64-boa
 
 # (tpg) add more paths to check for dtb files
 Patch1:		https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/u-boot-2021.04-rc4-add-more-directories-to-efi_dtb_prefixes.patch
+Patch2:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhide/f/smbios-Simplify-reporting-of-unknown-values.patch
 
 # Board fixes and enablement
 # RPi - uses RPI firmware device tree for HAT support
-Patch3:		https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/rpi-Enable-using-the-DT-provided-by-the-Raspberry-Pi.patch
-Patch4:		https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/rpi-fallback-to-max-clock-for-mmc.patch
-Patch5:		https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/rpi-bcm2835_sdhost-firmware-managed-clock.patch
+Patch3:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhid/f/rpi-Enable-using-the-DT-provided-by-the-Raspberry-Pi.patch
+Patch4:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhide/f/rpi-fallback-to-max-clock-for-mmc.patch
+Patch5:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhide/f/rpi-bcm2835_sdhost-firmware-managed-clock.patch
+Patch6:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhide/f/rpi-Copy-properties-from-firmware-DT-to-loaded-DT.patch
 
-# TI fixes
-Patch11:	https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/0001-Fix-BeagleAI-detection.patch
+# Rockchips improvements
+Patch7:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhide/f/rockchip-Add-initial-support-for-the-PinePhone-Pro.patch
+Patch8:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhide/f/0001-Revert-power-pmic-rk8xx-Support-sysreset-shutdown-me.patch
 
 # Misc patches
 # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=973323
