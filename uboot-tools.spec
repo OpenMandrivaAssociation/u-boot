@@ -1,9 +1,9 @@
 %undefine candidate
 
+Summary:	U-Boot utilities
 Name:		uboot-tools
 Version:	2022.10
-Release:	%{?candidate:0.%{candidate}.}1
-Summary:	U-Boot utilities
+Release:	%{?candidate:0.%{candidate}.}2
 License:	GPLv2+ BSD LGPL-2.1+ LGPL-2.0+
 URL:		http://www.denx.de/wiki/U-Boot
 Source0:	https://ftp.denx.de/pub/u-boot/u-boot-%{version}%{?candidate:-%{candidate}}.tar.bz2
@@ -26,8 +26,11 @@ Patch8:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhide/f/0001-Rever
 
 # Misc patches
 # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=973323
-Patch101:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip/zzz-usb-otg-fix.patch
-Patch107:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-disable-hdmi.patch
+Patch101:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/general-dwc-otg-usb-fix.patch
+Patch102:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-disable-hdmi.patch
+Patch103:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-always-init-rkclk.patch
+Patch104:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-rp64-rng.patch
+Patch105:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/u-boot-rk-rk3399-usb-start.patch
 
 BuildRequires:	bc
 BuildRequires:	dtc
