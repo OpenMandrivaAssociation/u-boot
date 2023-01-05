@@ -3,7 +3,7 @@
 Summary:	U-Boot utilities
 Name:		uboot-tools
 Version:	2022.10
-Release:	%{?candidate:0.%{candidate}.}2
+Release:	%{?candidate:0.%{candidate}.}3
 License:	GPLv2+ BSD LGPL-2.1+ LGPL-2.0+
 URL:		http://www.denx.de/wiki/U-Boot
 Source0:	https://ftp.denx.de/pub/u-boot/u-boot-%{version}%{?candidate:-%{candidate}}.tar.bz2
@@ -31,7 +31,9 @@ Patch102:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-
 Patch103:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-always-init-rkclk.patch
 Patch104:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-rp64-rng.patch
 Patch105:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/u-boot-rk-rk3399-usb-start.patch
-
+Patch106:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-ehci-probe-usb2.patch
+Patch107:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-populate-child-node-of-syscon.patch
+Patch108:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/board-rockpro64-advanced-recovery.patch
 BuildRequires:	bc
 BuildRequires:	dtc
 BuildRequires:	make
