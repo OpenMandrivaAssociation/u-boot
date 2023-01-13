@@ -2,8 +2,8 @@
 
 Summary:	U-Boot utilities
 Name:		uboot-tools
-Version:	2022.10
-Release:	%{?candidate:0.%{candidate}.}3
+Version:	2023.01
+Release:	%{?candidate:0.%{candidate}.}1
 License:	GPLv2+ BSD LGPL-2.1+ LGPL-2.0+
 URL:		http://www.denx.de/wiki/U-Boot
 Source0:	https://ftp.denx.de/pub/u-boot/u-boot-%{version}%{?candidate:-%{candidate}}.tar.bz2
@@ -22,7 +22,6 @@ Patch6:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhide/f/rpi-Copy-p
 
 # Rockchips improvements
 Patch7:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhide/f/rockchip-Add-initial-support-for-the-PinePhone-Pro.patch
-Patch8:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhide/f/0001-Revert-power-pmic-rk8xx-Support-sysreset-shutdown-me.patch
 
 # Misc patches
 # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=973323
@@ -135,7 +134,7 @@ do
   fi
 # End ATF
 
-  %make_build $(echo $board)_defconfig O=builds/$(echo $board)/
+  BINMAN_ALLOW_MISSING=1 %make_build $(echo $board)_defconfig O=builds/$(echo $board)/
 
 # (tpg) add our distribution mark and some safe default configs
   sed -i -e '/^CONFIG_IDENT_STRING=".*"/ s/"$/  %{distribution}"/' builds/$(echo $board)/.config
@@ -143,7 +142,7 @@ do
   sed -i -e 's/.*CONFIG_GZIP.*$/CONFIG_GZIP=y/g' builds/$(echo $board)/.config
   sed -i -e 's/.*CONFIG_CMD_UNZIP.*$/CONFIG_CMD_UNZIP=y/g' builds/$(echo $board)/.config
 
-  %make_build HOSTCC="%{__cc} %{optflags}" CROSS_COMPILE="" LDFLAGS="-fuse-ld=bfd" KBUILD_LDFLAGS="-fuse-ld=bfd" HOSTLDFLAGS="-fuse-ld=bfd" V=1 O=builds/$(echo $board)/
+  BINMAN_ALLOW_MISSING=1 %make_build HOSTCC="%{__cc} %{optflags}" CROSS_COMPILE="" LDFLAGS="-fuse-ld=bfd" KBUILD_LDFLAGS="-fuse-ld=bfd" HOSTLDFLAGS="-fuse-ld=bfd" V=1 O=builds/$(echo $board)/
 done
 
 # build spi images for rockchip boards with SPI flash
