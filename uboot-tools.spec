@@ -2,7 +2,7 @@
 
 Summary:	U-Boot utilities
 Name:		uboot-tools
-Version:	2023.01
+Version:	2023.04
 Release:	%{?candidate:0.%{candidate}.}1
 License:	GPLv2+ BSD LGPL-2.1+ LGPL-2.0+
 URL:		http://www.denx.de/wiki/U-Boot
@@ -16,9 +16,7 @@ Patch2:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhide/f/smbios-Sim
 # Board fixes and enablement
 # RPi - uses RPI firmware device tree for HAT support
 Patch3:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhid/f/rpi-Enable-using-the-DT-provided-by-the-Raspberry-Pi.patch
-Patch4:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhide/f/rpi-fallback-to-max-clock-for-mmc.patch
-Patch5:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhide/f/rpi-bcm2835_sdhost-firmware-managed-clock.patch
-Patch6:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhide/f/rpi-Copy-properties-from-firmware-DT-to-loaded-DT.patch
+
 
 # Rockchips improvements
 Patch7:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhide/f/rockchip-Add-initial-support-for-the-PinePhone-Pro.patch
@@ -26,13 +24,13 @@ Patch7:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhide/f/rockchip-A
 # Misc patches
 # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=973323
 Patch101:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/general-dwc-otg-usb-fix.patch
-Patch102:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-disable-hdmi.patch
+#Patch102:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-disable-hdmi.patch
 Patch103:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-always-init-rkclk.patch
 Patch104:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-rp64-rng.patch
 Patch105:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/u-boot-rk-rk3399-usb-start.patch
 Patch106:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-ehci-probe-usb2.patch
 Patch107:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-populate-child-node-of-syscon.patch
-Patch108:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/board-rockpro64-advanced-recovery.patch
+#Patch108:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/board-rockpro64-advanced-recovery.patch
 BuildRequires:	bc
 BuildRequires:	dtc
 BuildRequires:	make
@@ -49,6 +47,7 @@ BuildRequires:	pkgconfig(ncursesw)
 BuildRequires:	swig
 %ifarch aarch64
 BuildRequires:	arm-trusted-firmware-armv8
+BuildRequires:	python3dist(pyelftools)
 %endif
 Requires:	dtc
 %ifarch %{armx}
@@ -125,9 +124,9 @@ do
   rk3328=(evb-rk3328 nanopi-r2s-rk3328 rock64-rk3328 rock-pi-e-rk3328 roc-cc-rk3328)
   if [[ " ${rk3328[*]} " == *" $board "* ]]; then
     echo "Board: $board using rk3328"
-    cp /usr/share/arm-trusted-firmware/rk3328/* builds/$(echo $board)/
+    cp /usr/share/arm-trusted-firmware/rk3328/bl31.elf builds/$(echo $board)/atf-bl31
   fi
-  rk3399=(evb-rk3399 ficus-rk3399 firefly-rk3399 khadas-edge-captain-rk3399 khadas-edge-rk3399 khadas-edge-v-rk3399 leez-rk3399 nanopc-t4-rk3399 nanopi-m4-2gb-rk3399 nanopi-m4b-rk3399 nanopi-m4-rk3399 nanopi-neo4-rk3399 nanopi-r4s-rk3399 orangepi-rk3399 pinebook-pro-rk3399 puma-rk3399 rock960-rk3399 rock-pi-4c-rk3399 rock-pi-4-rk3399 rock-pi-n10-rk3399pro rockpro64-rk3399 roc-pc-mezzanine-rk3399 roc-pc-rk3399)
+  rk3399=(evb-rk3399 ficus-rk3399 firefly-rk3399 khadas-edge-captain-rk3399 khadas-edge-rk3399 khadas-edge-v-rk3399 leez-rk3399 nanopc-t4-rk3399 nanopi-m4-2gb-rk3399 nanopi-m4b-rk3399 nanopi-m4-rk3399 nanopi-neo4-rk3399 nanopi-r4s-rk3399 orangepi-rk3399 pinebook-pro-rk3399 pinephone-pro-rk3399 puma-rk3399 rock960-rk3399 rock-pi-4c-rk3399 rock-pi-4-rk3399 rock-pi-n10-rk3399pro rockpro64-rk3399 roc-pc-mezzanine-rk3399 roc-pc-rk3399 eaidk-610-rk3399)
   if [[ " ${rk3399[*]} " == *" $board "* ]]; then
     echo "Board: $board using rk3399"
     cp /usr/share/arm-trusted-firmware/rk3399/* builds/$(echo $board)/
@@ -199,7 +198,7 @@ do
 done
 %endif
 
-for tool in bmp_logo dumpimage env/fw_printenv fit_check_sign fit_info gdb/gdbcont gdb/gdbsend gen_eth_addr gen_ethaddr_crc img2srec mkenvimage mkimage mksunxiboot ncb proftool sunxi-spl-image-builder ubsha1 xway-swap-bytes kwboot
+for tool in dumpimage env/fw_printenv fit_check_sign fit_info gdb/gdbcont gdb/gdbsend gen_eth_addr gen_ethaddr_crc ifwitool img2srec kwboot mkeficapsule mkenvimage mkimage mksunxiboot ncb proftool sunxi-spl-image-builder
 do
     install -p -m 0755 builds/tools/$tool %{buildroot}%{_bindir}
 done
