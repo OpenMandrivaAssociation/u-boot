@@ -12,12 +12,13 @@ Scan child node so device such as PHY can be initialized.
  arch/arm/mach-rockchip/rk3399/syscon_rk3399.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff -Naur a/arch/arm/mach-rockchip/rk3399/syscon_rk3399.c b/arch/arm/mach-rockchip/rk3399/syscon_rk3399.c
---- a/arch/arm/mach-rockchip/rk3399/syscon_rk3399.c	2022-10-03 19:25:32.000000000 +0000
-+++ b/arch/arm/mach-rockchip/rk3399/syscon_rk3399.c	2023-01-05 13:33:42.466472243 +0000
-@@ -25,6 +25,9 @@
- 	.bind = dm_scan_fdt_dev,
- #endif
+diff --git a/arch/arm/mach-rockchip/rk3399/syscon_rk3399.c b/arch/arm/mach-rockchip/rk3399/syscon_rk3399.c
+index 259ca44d68..81b04aa7f8 100644
+--- a/arch/arm/mach-rockchip/rk3399/syscon_rk3399.c
++++ b/arch/arm/mach-rockchip/rk3399/syscon_rk3399.c
+@@ -21,6 +21,9 @@ U_BOOT_DRIVER(syscon_rk3399) = {
+ 	.name = "rk3399_syscon",
+ 	.id = UCLASS_SYSCON,
  	.of_match = rk3399_syscon_ids,
 +#if !CONFIG_IS_ENABLED(OF_PLATDATA)
 +	.bind = dm_scan_fdt_dev,
@@ -25,3 +26,6 @@ diff -Naur a/arch/arm/mach-rockchip/rk3399/syscon_rk3399.c b/arch/arm/mach-rockc
  };
  
  #if CONFIG_IS_ENABLED(OF_PLATDATA)
+-- 
+2.17.1
+

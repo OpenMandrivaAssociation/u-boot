@@ -1,8 +1,8 @@
-%undefine candidate
+%define candidate rc3
 
 Summary:	U-Boot utilities
 Name:		uboot-tools
-Version:	2023.04
+Version:	2023.07
 Release:	%{?candidate:0.%{candidate}.}1
 License:	GPLv2+ BSD LGPL-2.1+ LGPL-2.0+
 URL:		http://www.denx.de/wiki/U-Boot
@@ -23,14 +23,14 @@ Patch7:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhide/f/rockchip-A
 
 # Misc patches
 # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=973323
-Patch101:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/general-dwc-otg-usb-fix.patch
-#Patch102:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-disable-hdmi.patch
-Patch103:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-always-init-rkclk.patch
-Patch104:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-rp64-rng.patch
-Patch105:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/u-boot-rk-rk3399-usb-start.patch
-Patch106:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-ehci-probe-usb2.patch
-Patch107:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/rk3399-populate-child-node-of-syscon.patch
-#Patch108:	https://raw.githubusercontent.com/armbian/build/master/patch/u-boot/u-boot-rockchip64/board-rockpro64-advanced-recovery.patch
+Patch101:	https://raw.githubusercontent.com/armbian/build/main/patch/u-boot/u-boot-rockchip64-v2022.04/general-dwc-otg-usb-fix.patch
+#Patch102:	https://raw.githubusercontent.com/armbian/build/main/patch/u-boot/u-boot-rockchip64-v2022.04/general-support-recovery-button.patch
+#Patch103:	https://raw.githubusercontent.com/armbian/build/main/patch/u-boot/u-boot-rockchip64-v2022.04/rk3399-disable-hdmi.patch
+Patch104:	https://raw.githubusercontent.com/armbian/build/main/patch/u-boot/u-boot-rockchip64-v2022.04/rk3399-always-init-rkclk.patch
+#Patch105:	https://raw.githubusercontent.com/armbian/build/main/patch/u-boot/u-boot-rockchip64-v2022.04/u-boot-rk-rk3399-usb-start.patch
+#Patch106:	https://raw.githubusercontent.com/armbian/build/main/patch/u-boot/u-boot-rockchip64-v2022.04/rk3399-populate-child-node-of-syscon.patch
+#Patch107:	https://raw.githubusercontent.com/armbian/build/main/patch/u-boot/u-boot-rockchip64-v2022.04/board-rockpro64-advanced-recovery.patch
+Patch108:	https://raw.githubusercontent.com/armbian/build/main/patch/u-boot/u-boot-rockchip64-v2022.04/sdmmc-force-fifo-mode-in-spl.patch
 BuildRequires:	bc
 BuildRequires:	dtc
 BuildRequires:	make
@@ -133,7 +133,7 @@ do
   fi
 # End ATF
 
-  BINMAN_ALLOW_MISSING=1 %make_build $(echo $board)_defconfig O=builds/$(echo $board)/
+  BINMAN_ALLOW_MISSING=1 make $(echo $board)_defconfig O=builds/$(echo $board)/
 
 # (tpg) add our distribution mark and some safe default configs
   sed -i -e '/^CONFIG_IDENT_STRING=".*"/ s/"$/  %{distribution}"/' builds/$(echo $board)/.config

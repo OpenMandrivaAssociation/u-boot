@@ -1,6 +1,7 @@
-diff -Naur a/include/configs/evb_rk3399.h b/include/configs/evb_rk3399.h
---- a/include/configs/evb_rk3399.h	2021-10-04 15:09:26.000000000 +0000
-+++ b/include/configs/evb_rk3399.h	2021-12-21 12:47:04.215098730 +0000
+diff --git a/include/configs/evb_rk3399.h b/include/configs/evb_rk3399.h
+index 2d3db228..c0b03588 100644
+--- a/include/configs/evb_rk3399.h
++++ b/include/configs/evb_rk3399.h
 @@ -6,11 +6,6 @@
  #ifndef __EVB_RK3399_H
  #define __EVB_RK3399_H
@@ -12,4 +13,4 @@ diff -Naur a/include/configs/evb_rk3399.h b/include/configs/evb_rk3399.h
 -
  #include <configs/rk3399_common.h>
  
- #define SDRAM_BANK_SIZE			(2UL << 30)
+ #if defined(CONFIG_ENV_IS_IN_MMC)
