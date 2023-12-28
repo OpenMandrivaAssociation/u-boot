@@ -1,8 +1,8 @@
-%define candidate rc3
+%define candidate rc5
 
 Summary:	U-Boot utilities
 Name:		uboot-tools
-Version:	2023.07
+Version:	2024.01
 Release:	%{?candidate:0.%{candidate}.}1
 License:	GPLv2+ BSD LGPL-2.1+ LGPL-2.0+
 URL:		http://www.denx.de/wiki/U-Boot
@@ -30,7 +30,6 @@ Patch104:	https://raw.githubusercontent.com/armbian/build/main/patch/u-boot/u-bo
 #Patch105:	https://raw.githubusercontent.com/armbian/build/main/patch/u-boot/u-boot-rockchip64-v2022.04/u-boot-rk-rk3399-usb-start.patch
 #Patch106:	https://raw.githubusercontent.com/armbian/build/main/patch/u-boot/u-boot-rockchip64-v2022.04/rk3399-populate-child-node-of-syscon.patch
 #Patch107:	https://raw.githubusercontent.com/armbian/build/main/patch/u-boot/u-boot-rockchip64-v2022.04/board-rockpro64-advanced-recovery.patch
-Patch108:	https://raw.githubusercontent.com/armbian/build/main/patch/u-boot/u-boot-rockchip64-v2022.04/sdmmc-force-fifo-mode-in-spl.patch
 BuildRequires:	bc
 BuildRequires:	dtc
 BuildRequires:	make
@@ -209,14 +208,13 @@ install -p -m 0755 builds/tools/env/fw_printenv %{buildroot}%{_bindir}
 
 # Copy some useful docs over
 mkdir -p builds/docs
-cp -p board/hisilicon/hikey/README builds/docs/README.hikey
 cp -p board/rockchip/evb_rk3399/README builds/docs/README.evb_rk3399
 cp -p board/sunxi/README.sunxi64 builds/docs/README.sunxi64
 cp -p board/sunxi/README.nand builds/docs/README.sunxi-nand
 
 %files
 %doc README doc/develop/distro.rst doc/README.gpt
-%doc doc/README.rockchip doc/develop/uefi doc/uImage.FIT doc/arch/arm64.rst
+%doc doc/README.rockchip doc/develop/uefi doc/arch/arm64.rst
 %doc builds/docs/* doc/board/amlogic/ doc/board/rockchip/
 %{_bindir}/*
 %doc %{_mandir}/man1/mkimage.1*
