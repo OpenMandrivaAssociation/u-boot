@@ -1,0 +1,14 @@
+%package @BOARD@
+Summary: U-Boot loader for @BOARD@
+Obsoletes: uboot-images-armv8 < %{EVRD}
+Group: System
+BuildArch: noarch
+
+%description @BOARD@
+U-Boot loader for @BOARD@
+
+These files are mostly required by image generation tools
+and rarely used directly.
+
+%files @BOARD@
+%{_datadir}/uboot/@BOARD@
