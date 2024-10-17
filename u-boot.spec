@@ -5,7 +5,7 @@ Name:		u-boot
 Version:	2024.01
 Release:	%{?candidate:0.%{candidate}.}1
 License:	GPLv2+ BSD LGPL-2.1+ LGPL-2.0+
-URL:		http://www.denx.de/wiki/U-Boot
+URL:		https://www.denx.de/wiki/U-Boot
 Source0:	https://ftp.denx.de/pub/u-boot/u-boot-%{version}%{?candidate:-%{candidate}}.tar.bz2
 Source1:	u-boot-board.template
 
