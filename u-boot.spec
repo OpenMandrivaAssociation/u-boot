@@ -1,8 +1,8 @@
-%define candidate rc5
+%define candidate rc6
 
 Summary:	The U-Boot bootloader
 Name:		u-boot
-Version:	2024.01
+Version:	2025.01
 Release:	%{?candidate:0.%{candidate}.}1
 License:	GPLv2+ BSD LGPL-2.1+ LGPL-2.0+
 URL:		https://www.denx.de/wiki/U-Boot
@@ -11,15 +11,15 @@ Source1:	u-boot-board.template
 
 # (tpg) add more paths to check for dtb files
 Patch1:		https://src.fedoraproject.org/rpms/uboot-tools/raw/master/f/u-boot-2021.04-rc4-add-more-directories-to-efi_dtb_prefixes.patch
-Patch2:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhide/f/smbios-Simplify-reporting-of-unknown-values.patch
+#Patch2:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhide/f/smbios-Simplify-reporting-of-unknown-values.patch
 
 # Board fixes and enablement
 # RPi - uses RPI firmware device tree for HAT support
-Patch3:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhid/f/rpi-Enable-using-the-DT-provided-by-the-Raspberry-Pi.patch
+#Patch3:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhid/f/rpi-Enable-using-the-DT-provided-by-the-Raspberry-Pi.patch
 
 
 # Rockchips improvements
-Patch7:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhide/f/rockchip-Add-initial-support-for-the-PinePhone-Pro.patch
+#Patch7:		https://src.fedoraproject.org/rpms/uboot-tools/raw/rawhide/f/rockchip-Add-initial-support-for-the-PinePhone-Pro.patch
 
 # Misc patches
 # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=973323
@@ -34,8 +34,9 @@ BuildRequires:	bc
 BuildRequires:	dtc
 BuildRequires:	make
 BuildRequires:	pkgconfig(python)
-BuildRequires:	python3dist(setuptools)
-BuildRequires:	python3dist(libfdt)
+BuildRequires:	python%{pyver}dist(setuptools)
+BuildRequires:	python%{pyver}dist(libfdt)
+BuildRequires:	python%{pyver}dist(pyelftools)
 BuildRequires:	flex
 BuildRequires:	bison
 BuildRequires:	pkgconfig(openssl)
@@ -45,7 +46,6 @@ BuildRequires:	pkgconfig(gnutls)
 BuildRequires:	pkgconfig(ncursesw)
 BuildRequires:	swig
 BuildRequires:	arm-trusted-firmware-armv8
-BuildRequires:	python3dist(pyelftools)
 Requires:	dtc
 # (tpg) this is needed for our logo
 BuildRequires:	distro-release-desktop
@@ -61,7 +61,8 @@ BuildRequires:	cross-aarch64-openmandriva-linux-gnu-gcc
 %define sun50h6_boards beelink_gs1 orangepi_3 orangepi_lite2 orangepi_one_plus orangepi_zero2 pine_h64 tanix_tx6
 %define rk3328_boards evb-rk3328 nanopi-r2s-rk3328 rock64-rk3328 rock-pi-e-rk3328 roc-cc-rk3328
 %define rk3399_boards evb-rk3399 ficus-rk3399 firefly-rk3399 khadas-edge-captain-rk3399 khadas-edge-rk3399 khadas-edge-v-rk3399 leez-rk3399 nanopc-t4-rk3399 nanopi-m4-2gb-rk3399 nanopi-m4b-rk3399 nanopi-m4-rk3399 nanopi-neo4-rk3399 nanopi-r4s-rk3399 orangepi-rk3399 pinebook-pro-rk3399 pinephone-pro-rk3399 puma-rk3399 rock960-rk3399 rock-pi-4c-rk3399 rock-pi-4-rk3399 rock-pi-n10-rk3399pro rockpro64-rk3399 roc-pc-mezzanine-rk3399 roc-pc-rk3399 eaidk-610-rk3399
-%define aarch64_boards qemu_arm64 rpi_3 rpi_4 rpi_arm64 mt8183_pumpkin apple_m1 dragonboard410c dragonboard820c dragonboard845c geekbox hikey khadas-vim khadas-vim2 khadas-vim3 khadas-vim3l libretech-ac libretech_all_h3_it_h5 libretech_all_h5_cc_h5 libretech-cc mvebu_espressobin-88f3720 mvebu_mcbin-88f8040 nanopi-k2 nanopi_r1s_h5 odroid-c2 p212 p2371-2180 p2771-0000-500 p3450-0000 poplar starqltechn turris_mox vexpress_aemv8a_juno xilinx_zynqmp_virt %{sun50i_boards} %{sun50h6_boards} %{rk3328_boards} %{rk3399_boards}
+%define rk3588_boards cm3588-nas-rk3588 coolpi-4b-rk3588s coolpi-cm5-evb-rk3588 coolpi-cm5-genbook-rk3588 evb-rk3588 generic-rk3588 jaguar-rk3588 nanopc-t6-rk3588 nanopi-r6c-rk3588s nanopi-r6s-rk3588s neu6a-io-rk3588 neu6b-io-rk3588 nova-rk3588s odroid-m2-rk3588s orangepi-5-plus-rk3588 orangepi-5-rk3588s quartzpro64-rk3588 rock-5-itx-rk3588 rock5a-rk3588s rock5b-rk3588 sige7-rk3588 tiger-rk3588 toybrick-rk3588 turing-rk1-rk3588
+%define aarch64_boards qemu_arm64 rpi_3 rpi_4 rpi_arm64 mt8183_pumpkin apple_m1 dragonboard410c dragonboard820c geekbox hikey khadas-vim khadas-vim2 khadas-vim3 khadas-vim3l libretech-ac libretech_all_h3_it_h5 libretech_all_h5_cc_h5 libretech-cc mvebu_espressobin-88f3720 mvebu_mcbin-88f8040 nanopi-k2 nanopi_r1s_h5 odroid-c2 p212 p2371-2180 p2771-0000-500 p3450-0000 poplar turris_mox vexpress_aemv8a_juno xilinx_zynqmp_virt %{sun50i_boards} %{sun50h6_boards} %{rk3328_boards} %{rk3399_boards} %{rk3588_boards}
 
 %description
 The U-Boot bootloader, commonly used with embedded devices
@@ -127,6 +128,7 @@ for board in %{riscv64_boards} %{aarch64_boards}; do
 	sun50h6=(%{sun50h6_boards})
 	rk3328=(%{rk3328_boards})
 	rk3399=(%{rk3399_boards})
+	rk3588=(%{rk3588_boards})
 	if [[ " ${sun50i[*]} " == *" $board "* ]]; then
 		echo "Board: $board using sun50i_a64"
 		cp %{_datadir}/arm-trusted-firmware/sun50i_a64/* builds/$board/
@@ -139,6 +141,9 @@ for board in %{riscv64_boards} %{aarch64_boards}; do
 	elif [[ " ${rk3399[*]} " == *" $board "* ]]; then
 		echo "Board: $board using rk3399"
 		cp %{_datadir}/arm-trusted-firmware/rk3399/* builds/$board/
+	elif [[ " ${rk3588[*]} " == *" $board "* ]]; then
+		echo "Board: $board using rk3588"
+		cp %{_datadir}/arm-trusted-firmware/rk3588/* builds/$board/
 	fi
 	# End ATF
 
