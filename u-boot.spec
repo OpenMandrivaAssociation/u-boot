@@ -1,10 +1,11 @@
-%define candidate rc6
+#define candidate rc6
 
 Summary:	The U-Boot bootloader
 Name:		u-boot
 Version:	2025.01
 Release:	%{?candidate:0.%{candidate}.}1
 License:	GPLv2+ BSD LGPL-2.1+ LGPL-2.0+
+Group:		System
 URL:		https://www.denx.de/wiki/U-Boot
 Source0:	https://ftp.denx.de/pub/u-boot/u-boot-%{version}%{?candidate:-%{candidate}}.tar.bz2
 Source1:	u-boot-board.template
@@ -56,13 +57,13 @@ BuildRequires:	cross-riscv64-openmandriva-linux-gnu-gcc
 BuildRequires:	cross-aarch64-openmandriva-linux-gnu-binutils
 BuildRequires:	cross-aarch64-openmandriva-linux-gnu-gcc
 
-%define riscv64_boards qemu-riscv64 qemu-riscv64_smode qemu-riscv64_spl
+%define riscv64_boards qemu-riscv64 qemu-riscv64_smode qemu-riscv64_spl sifive_unmatched
 %define sun50i_boards a64-olinuxino amarula_a64_relic bananapi_m2_plus_h5 bananapi_m64 libretech_all_h3_cc_h5 nanopi_a64 nanopi_neo2 nanopi_neo_plus2 orangepi_pc2 orangepi_prime orangepi_win orangepi_zero_plus orangepi_zero_plus2 pine64-lts pine64_plus pinebook pinephone pinetab sopine_baseboard teres_i
 %define sun50h6_boards beelink_gs1 orangepi_3 orangepi_lite2 orangepi_one_plus orangepi_zero2 pine_h64 tanix_tx6
 %define rk3328_boards evb-rk3328 nanopi-r2s-rk3328 rock64-rk3328 rock-pi-e-rk3328 roc-cc-rk3328
 %define rk3399_boards evb-rk3399 ficus-rk3399 firefly-rk3399 khadas-edge-captain-rk3399 khadas-edge-rk3399 khadas-edge-v-rk3399 leez-rk3399 nanopc-t4-rk3399 nanopi-m4-2gb-rk3399 nanopi-m4b-rk3399 nanopi-m4-rk3399 nanopi-neo4-rk3399 nanopi-r4s-rk3399 orangepi-rk3399 pinebook-pro-rk3399 pinephone-pro-rk3399 puma-rk3399 rock960-rk3399 rock-pi-4c-rk3399 rock-pi-4-rk3399 rock-pi-n10-rk3399pro rockpro64-rk3399 roc-pc-mezzanine-rk3399 roc-pc-rk3399 eaidk-610-rk3399
 %define rk3588_boards cm3588-nas-rk3588 coolpi-4b-rk3588s coolpi-cm5-evb-rk3588 coolpi-cm5-genbook-rk3588 evb-rk3588 generic-rk3588 jaguar-rk3588 nanopc-t6-rk3588 nanopi-r6c-rk3588s nanopi-r6s-rk3588s neu6a-io-rk3588 neu6b-io-rk3588 nova-rk3588s odroid-m2-rk3588s orangepi-5-plus-rk3588 orangepi-5-rk3588s quartzpro64-rk3588 rock-5-itx-rk3588 rock5a-rk3588s rock5b-rk3588 sige7-rk3588 tiger-rk3588 toybrick-rk3588 turing-rk1-rk3588
-%define aarch64_boards qemu_arm64 rpi_3 rpi_4 rpi_arm64 mt8183_pumpkin apple_m1 dragonboard410c dragonboard820c geekbox hikey khadas-vim khadas-vim2 khadas-vim3 khadas-vim3l libretech-ac libretech_all_h3_it_h5 libretech_all_h5_cc_h5 libretech-cc mvebu_espressobin-88f3720 mvebu_mcbin-88f8040 nanopi-k2 nanopi_r1s_h5 odroid-c2 p212 p2371-2180 p2771-0000-500 p3450-0000 poplar turris_mox vexpress_aemv8a_juno xilinx_zynqmp_virt %{sun50i_boards} %{sun50h6_boards} %{rk3328_boards} %{rk3399_boards} %{rk3588_boards}
+%define aarch64_boards qemu_arm64 rpi_3 rpi_3_b_plus rpi_4 rpi_arm64 mt8183_pumpkin apple_m1 dragonboard410c dragonboard820c geekbox hikey khadas-vim khadas-vim2 khadas-vim3 khadas-vim3l libretech-ac libretech_all_h3_it_h5 libretech_all_h5_cc_h5 libretech-cc mvebu_espressobin-88f3720 mvebu_mcbin-88f8040 nanopi-k2 nanopi_r1s_h5 odroid-c2 p212 p2371-2180 p2771-0000-500 p3450-0000 poplar turris_mox vexpress_aemv8a_juno xilinx_zynqmp_virt imx8qm_rom7720_a1_4G synquacer_developerbox %{sun50i_boards} %{sun50h6_boards} %{rk3328_boards} %{rk3399_boards} %{rk3588_boards}
 
 %description
 The U-Boot bootloader, commonly used with embedded devices
@@ -104,13 +105,6 @@ mkdir builds
 %make_build HOSTCC="%{__cc} %{optflags}" CROSS_COMPILE="" LDFLAGS="-fuse-ld=bfd" KBUILD_LDFLAGS="-fuse-ld=bfd" HOSTLDFLAGS="-fuse-ld=bfd" tools-only_defconfig O=builds/
 %make_build HOSTCC="%{__cc} %{optflags}" CROSS_COMPILE="" LDFLAGS="-fuse-ld=bfd" KBUILD_LDFLAGS="-fuse-ld=bfd" HOSTLDFLAGS="-fuse-ld=bfd" tools-all O=builds/
 
-#for board in %{riscv64_boards}; do
-#	mkdir builds/${board}
-#	make CROSS_COMPILE=riscv64-openmandriva-linux-gnu- LDFLAGS=-fuse-ld=bfd KBUILD_LDFLAGS=-fuse-ld=bfd HOSTLDFLAGS=-fuse-ld=bfd ${board}_defconfig O=builds/${board} OPENSBI=%{_datadir}/opensbi/generic/firmware/fw_dynamic.bin
-#	make CROSS_COMPILE=riscv64-openmandriva-linux-gnu- LDFLAGS=-fuse-ld=bfd KBUILD_LDFLAGS=-fuse-ld=bfd HOSTLDFLAGS=-fuse-ld=bfd O=builds/${board} OPENSBI=%{_datadir}/opensbi/generic/firmware/fw_dynamic.bin
-#	make CROSS_COMPILE=riscv64-openmandriva-linux-gnu- LDFLAGS=-fuse-ld=bfd KBUILD_LDFLAGS=-fuse-ld=bfd HOSTLDFLAGS=-fuse-ld=bfd u-boot.elf O=builds/${board} OPENSBI=%{_datadir}/opensbi/generic/firmware/fw_dynamic.bin
-#done
-
 for board in %{riscv64_boards} %{aarch64_boards}; do
 	rv64=(%{riscv64_boards})
 
@@ -147,15 +141,18 @@ for board in %{riscv64_boards} %{aarch64_boards}; do
 	fi
 	# End ATF
 
-	make BINMAN_ALLOW_MISSING=1 LDFLAGS=-fuse-ld=bfd KBUILD_LDFLAGS=-fuse-ld=bfd HOSTLDFLAGS=-fuse-ld=bfd ${board}_defconfig O=builds/${board} OPENSBI=%{_datadir}/opensbi/generic/firmware/fw_dynamic.bin
+	%make_build BINMAN_ALLOW_MISSING=1 LDFLAGS=-fuse-ld=bfd KBUILD_LDFLAGS=-fuse-ld=bfd HOSTLDFLAGS=-fuse-ld=bfd ${board}_defconfig O=builds/${board} OPENSBI=%{_datadir}/opensbi/generic/firmware/fw_dynamic.bin
 	# (tpg) add our distribution mark and some safe default configs
 	sed -i -e '/^CONFIG_IDENT_STRING=".*"/ s/"$/  %{distribution}"/' builds/$board/.config
 	sed -i -e 's/.*CONFIG_SERIAL_PRESENT.*$/CONFIG_SERIAL_PRESENT=y/g' builds/$board/.config
 	sed -i -e 's/.*CONFIG_GZIP.*$/CONFIG_GZIP=y/g' builds/$board/.config
 	sed -i -e 's/.*CONFIG_CMD_UNZIP.*$/CONFIG_CMD_UNZIP=y/g' builds/$board/.config
 
-	make BINMAN_ALLOW_MISSING=1 LDFLAGS=-fuse-ld=bfd KBUILD_LDFLAGS=-fuse-ld=bfd HOSTLDFLAGS=-fuse-ld=bfd O=builds/${board} OPENSBI=%{_datadir}/opensbi/generic/firmware/fw_dynamic.bin
-	make BINMAN_ALLOW_MISSING=1 LDFLAGS=-fuse-ld=bfd KBUILD_LDFLAGS=-fuse-ld=bfd HOSTLDFLAGS=-fuse-ld=bfd u-boot.elf O=builds/${board} OPENSBI=%{_datadir}/opensbi/generic/firmware/fw_dynamic.bin
+	%make_build BINMAN_ALLOW_MISSING=1 LDFLAGS=-fuse-ld=bfd KBUILD_LDFLAGS=-fuse-ld=bfd HOSTLDFLAGS=-fuse-ld=bfd O=builds/${board} OPENSBI=%{_datadir}/opensbi/generic/firmware/fw_dynamic.bin
+	%make_build BINMAN_ALLOW_MISSING=1 LDFLAGS=-fuse-ld=bfd KBUILD_LDFLAGS=-fuse-ld=bfd HOSTLDFLAGS=-fuse-ld=bfd u-boot.elf O=builds/${board} OPENSBI=%{_datadir}/opensbi/generic/firmware/fw_dynamic.bin
+	if [ -n "$EXTRA_TARGETS" ]; then
+		%make_build BINMAN_ALLOW_MISSING=1 LDFLAGS=-fuse-ld=bfd KBUILD_LDFLAGS=-fuse-ld=bfd HOSTLDFLAGS=-fuse-ld=bfd O=builds/${board} OPENSBI=%{_datadir}/opensbi/generic/firmware/fw_dynamic.bin $EXTRA_TARGETS
+	fi
 done
 
 %install
@@ -182,38 +179,12 @@ cp -p board/sunxi/README.nand builds/docs/README.sunxi-nand
 for board in ${BUILDS}; do
 	sed -e "s,@BOARD@,$board,g" %{S:1} >%{specpartsdir}/$board.specpart
 	mkdir -p %{buildroot}%{_datadir}/uboot/$board/
-	for file in u-boot.bin u-boot.dtb u-boot.elf u-boot.img u-boot-dtb.img u-boot.itb u-boot-sunxi-with-spl.bin u-boot-rockchip.bin idbloader.img idbloader.spi spl/boot.bin spl/sunxi-spl.bin; do
+	for file in u-boot.bin u-boot.dtb u-boot.elf u-boot.img u-boot-dtb.img u-boot.itb u-boot-sunxi-with-spl.bin u-boot-rockchip.bin u-boot-spl.bin idbloader.img idbloader.spi spl/u-boot-spl.bin spl/boot.bin spl/sunxi-spl.bin; do
 		if [ -f builds/$board/$file ]; then
 			install -p -m 0644 builds/$board/$file %{buildroot}%{_datadir}/uboot/$board/
 		fi
 	done
 done
-
-# Bit of a hack to remove binaries we don't use as they're large
-for board in ${BUILDS}; do
-	rm -f %{buildroot}%{_datadir}/uboot/$board/u-boot.dtb
-	if [ -f %{buildroot}%{_datadir}/uboot/$board/u-boot-sunxi-with-spl.bin ]; then
-		rm -f %{buildroot}%{_datadir}/uboot/$board/u-boot{,-dtb}.*
-	fi
-	if [ -f %{buildroot}%{_datadir}/uboot/$board/MLO ]; then
-		rm -f %{buildroot}%{_datadir}/uboot/$board/u-boot.bin
-	fi
-	if [ -f %{buildroot}%{_datadir}/uboot/$board/SPL ]; then
-		rm -f %{buildroot}%{_datadir}/uboot/$board/u-boot.bin
-	fi
-	if [ -f %{buildroot}%{_datadir}/uboot/$board/u-boot.imx ]; then
-		rm -f %{buildroot}%{_datadir}/uboot/$board/u-boot.bin
-	fi
-	if [ -f %{buildroot}%{_datadir}/uboot/$board/u-boot-spl.kwb ]; then
-		rm -f %{buildroot}%{_datadir}/uboot/$board/u-boot.*
-		rm -f %{buildroot}%{_datadir}/uboot/$board/u-boot-spl.bin
-	fi
-	if [ -f %{buildroot}%{_datadir}/uboot/$board/idbloader.img ]; then
-		rm -f %{buildroot}%{_datadir}/uboot/$board/u-boot.bin
-		rm -f %{buildroot}%{_datadir}/uboot/$board/u-boot{,-dtb}.img
-	fi
-done
-
 
 %files tools
 %doc README doc/develop/distro.rst doc/README.gpt
