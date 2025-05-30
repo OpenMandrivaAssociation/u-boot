@@ -2,7 +2,7 @@
 
 Summary:	The U-Boot bootloader
 Name:		u-boot
-Version:	2025.01
+Version:	2025.04
 Release:	%{?candidate:0.%{candidate}.}1
 License:	GPLv2+ BSD LGPL-2.1+ LGPL-2.0+
 Group:		System
