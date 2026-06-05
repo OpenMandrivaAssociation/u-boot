@@ -3,7 +3,7 @@
 Summary:	The U-Boot bootloader
 Name:		u-boot
 Version:	2026.01
-Release:	%{?candidate:0.%{candidate}.}2
+Release:	%{?candidate:0.%{candidate}.}3
 License:	GPLv2+ BSD LGPL-2.1+ LGPL-2.0+
 Group:		System
 URL:		https://www.denx.de/wiki/U-Boot
